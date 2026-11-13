@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Tide · Pinned idle study</title>
+<style>
+:root{--paper:#eceeea;--ink:#202726;--muted:#66716d;--line:#d3d9d1;--amber:#e9ba78;--tide:#a8d0e5;--glass-opacity:.65;--accent:var(--amber);font-family:Inter,"SF Pro Display","Segoe UI",system-ui,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #3c7774;outline-offset:4px}button{touch-action:manipulation}button svg{pointer-events:none}svg{display:block;flex-shrink:0}button:focus:not(:focus-visible){outline:none}button,a{-webkit-tap-highlight-color:transparent}
+.page{max-width:1456px;margin:auto;padding:30px 44px 28px}.page-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:22px;gap:20px}.wordmark{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:-.4px}.wordmark svg{width:23px;height:23px}.study-tag{font-size:12px;color:var(--muted)}.header-note{font-size:12px;color:var(--muted)}.intro{display:flex;align-items:end;justify-content:space-between;gap:30px;padding:32px 0 26px}h1{font-size:clamp(26px,3.1vw,43px);letter-spacing:-1.8px;line-height:1.12;font-weight:530;margin:0 0 11px}.intro p{font-size:14px;line-height:1.7;color:var(--muted);margin:0;max-width:650px}.compare-button{background:transparent;border:1px solid #bec7bd;border-radius:8px;padding:10px 13px;font-size:12px;white-space:nowrap;color:var(--ink)}.compare-button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.directions{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}.direction{position:relative;text-align:left;display:flex;gap:16px;align-items:center;padding:18px 20px;background:transparent;border:1px solid var(--line);border-radius:13px;color:var(--ink);min-height:100px}.direction[aria-pressed=true]{background:#f7f8f4;border-color:#53675b;box-shadow:0 0 0 1px #53675b}.direction .letter{display:flex;align-items:center;justify-content:center;width:33px;height:33px;border:1px solid #bdc8bb;border-radius:50%;font-size:13px;flex-shrink:0}.direction[aria-pressed=true] .letter{background:#243a30;color:#f4f7ee;border-color:#243a30}.direction-title{font-size:16px;font-weight:620;display:flex;align-items:center;gap:10px}.recommend{font-size:10px;color:#3e6550;background:#e4ecdf;border-radius:4px;padding:3px 6px;font-weight:500}.direction-description{font-size:12px;line-height:1.55;color:var(--muted);margin-top:5px}.mini-diagram{margin-left:auto;width:72px;height:47px;position:relative;border:1px solid #b7c2b6;border-radius:5px;background:linear-gradient(140deg,#e2e8df,#f2f3ec);flex-shrink:0}.mini-diagram:before{content:"";position:absolute;left:7px;top:7px;width:41px;height:24px;background:#f8faf6;border:1px solid #d3dbd0;border-radius:2px}.mini-diagram:after{content:"";position:absolute;left:19px;bottom:5px;width:36px;height:15px;border-radius:4px;background:#34443bd9;border:1px solid #e9ba7860}.mini-diagram.side:after{left:auto;right:5px;bottom:6px;width:23px;height:33px;background:#2a414bd9;border-color:#a8d0e560}
+.workbench{border:1px solid #cbd3c8;border-radius:15px;background:#f7f8f4;overflow:hidden}.preview-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;border-bottom:1px solid #cbd3c8;flex-wrap:wrap}.tasks{display:flex;gap:5px;align-items:center}.tasks-label{font-size:11px;color:var(--muted);margin-right:7px}.task{background:transparent;border:0;border-radius:6px;padding:7px 10px;font-size:12px;color:#617064}.task[aria-pressed=true]{color:#23352b;background:#e2e8de;font-weight:600}.settings{display:flex;align-items:center;gap:16px}.opacity-control{display:flex;align-items:center;gap:8px;font-size:11px;color:#647365}.opacity-control input{width:78px;accent-color:#4f6e5a}select{border:0;border-left:1px solid #d1d8ce;background:transparent;color:#59665c;padding:4px 6px 4px 14px;font-size:11px}.stage-grid{display:grid;grid-template-columns:1fr}.stage{position:relative;aspect-ratio:1.94;min-height:480px;overflow:hidden;background:#8f9e8d;isolation:isolate;--accent:var(--amber)}.stage.tide{--accent:var(--tide)}.wallpaper{position:absolute;inset:0;background:radial-gradient(ellipse 75% 120% at 105% 100%,#536e61 0%,transparent 65%),radial-gradient(ellipse 60% 120% at -10% 20%,#c2c5aa 0%,transparent 65%),linear-gradient(130deg,#a4b49d,#82968a)}.wallpaper:after{content:"";position:absolute;width:85%;height:130%;border:1px solid #dce2cd30;border-radius:50%;left:43%;top:0;transform:rotate(-35deg)}.desktop-bar{height:30px;position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:0 17px;background:#263b2a12;border-bottom:1px solid #e9efdf25;color:#1f3429;font-size:10px;font-weight:550}.desktop-menu{display:flex;gap:17px;align-items:center}.desktop-menu .system-dot{width:9px;height:9px;background:#273e2e;border-radius:3px;transform:rotate(45deg)}.desktop-right{display:flex;gap:12px;align-items:center}.desktop-time{font-variant-numeric:tabular-nums}.wifi{width:12px;height:10px;border-top:2px solid currentColor;border-radius:50%}
+.editor{position:absolute;left:5.5%;top:10.5%;width:75%;height:76%;border-radius:10px;background:#f3f4ed;box-shadow:0 18px 50px #243a3026;border:1px solid #f4f8eb99;overflow:hidden;transition:opacity .12s}.window-bar{height:34px;display:flex;align-items:center;border-bottom:1px solid #dfe4d8;padding:0 12px;gap:6px;background:#e9ede2}.window-dot{width:8px;height:8px;border-radius:50%;background:#bcc7b8}.window-dot:first-child{background:#d5aaa0}.window-dot:nth-child(2){background:#d6c598}.window-title{position:absolute;left:0;right:0;text-align:center;font-size:10px;color:#788171;pointer-events:none}.editor-body{height:calc(100% - 34px);display:flex}.editor-sidebar{padding:22px 12px;width:155px;border-right:1px solid #e1e6da;background:#edf0e6;flex-shrink:0;color:#84907c;font-size:11px}.sidebar-title{font-size:10px;color:#8a947f;margin-bottom:16px}.file-link{padding:8px 10px;margin:3px 0;border-radius:5px;white-space:nowrap}.file-link.selected{background:#dfe6d6;color:#4e6249}.file-link:before{content:"▤";display:inline-block;width:19px;opacity:.6}.editor-document{padding:28px 7% 50px;overflow:hidden;width:100%}.breadcrumb{font-size:9px;color:#929b88}.document-title{font-size:29px;font-weight:560;letter-spacing:-1px;color:#3d4d39;margin:19px 0 8px}.doc-subtitle{font-size:11px;color:#87927c;margin:0 0 25px;line-height:1.7}.document-rule{height:1px;background:#dce3d2;margin-bottom:20px}.doc-section{font-weight:600;font-size:13px;margin:18px 0 10px;color:#53614c}.doc-line{font-size:11px;color:#87927c;line-height:1.9;margin:0}.doc-check{font-size:11px;color:#7e8d75;line-height:2.4;display:flex;align-items:center;gap:10px}.checkbox{width:10px;height:10px;border:1px solid #b2bea6;border-radius:2px}.checkbox.checked{background:#99ac8b;border-color:#99ac8b}.doc-footer{font-size:9px;color:#a0ab93;margin-top:20px;display:flex;gap:15px}.desktop-label{position:absolute;right:18px;top:48px;color:#ecf0e5bf;font-size:10px;writing-mode:vertical-rl;letter-spacing:1px}.desktop-dock{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:7px;align-items:center;padding:5px 8px;background:#e5ecdb38;border:1px solid #f4f8eb35;border-radius:12px;backdrop-filter:blur(10px)}.dock-icon{width:22px;height:22px;background:#e6ecdd;border-radius:6px;color:#667a63;font-size:11px;display:grid;place-items:center}.dock-icon:nth-child(2){background:#728c96;color:white}.dock-icon:nth-child(3){background:#c0ae82;color:#fff}.dock-icon:nth-child(4){background:#62705f;color:#e8efdf}
+.overlay{position:absolute;z-index:3;left:50%;bottom:12%;transform:translateX(-50%);width:min(520px,79%);color:#f0f3ea;background:rgba(23,32,30,var(--glass-opacity));border:1px solid #e4eed52c;border-top-color:#edf4e04a;box-shadow:0 24px 70px #10231c40,0 4px 12px #0e221b24,inset 0 1px 0 #ffffff08;border-radius:21px;backdrop-filter:blur(18px) saturate(.85);-webkit-backdrop-filter:blur(18px) saturate(.85);overflow:hidden;text-align:left;transition:opacity .13s,background-color .13s}.overlay[hidden]{display:none}.overlay-top{display:flex;justify-content:space-between;align-items:center;padding:13px 17px 0;color:#b6c1b0}.overlay-identity{display:flex;align-items:center;gap:7px;font-size:10px;letter-spacing:.1px}.overlay-identity svg{width:15px;height:15px;color:var(--accent)}.overlay-buttons{display:flex;gap:4px}.icon-button{height:26px;width:26px;border:0;border-radius:6px;background:transparent;color:#a8b6aa;display:grid;place-items:center}.icon-button:hover,.icon-button[aria-pressed=true]{background:#f0f6df14;color:var(--accent)}.icon-button svg{width:13px;height:13px}.result-zone{padding:14px 23px 18px;min-height:130px}.result-category{font-size:10px;color:#a3b3a1;margin-bottom:7px;display:flex;align-items:center;gap:6px}.category-dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}.answer-line{display:flex;align-items:baseline;gap:9px}.answer{font-size:43px;letter-spacing:-1.6px;line-height:1.18;font-weight:430;font-variant-numeric:tabular-nums;color:#f3f5ed;overflow-wrap:anywhere}.answer.date-answer{font-size:29px;letter-spacing:-.8px}.answer-unit{font-size:19px;letter-spacing:-.4px;color:#a5b6a5}.answer-detail{font-size:11px;color:#9eaf9e;margin-top:8px;line-height:1.5}.answer-detail .fixture{color:#d9cba9}.composer{display:flex;align-items:center;gap:10px;padding:13px 17px;border-top:1px solid #e9f1dd1b;background:#0d1b1720}.composer-icon{color:var(--accent);width:16px;height:16px}.query{background:transparent;border:0;outline:none!important;color:#e3eade;width:100%;font-size:15px;letter-spacing:-.2px;min-width:0;line-height:1.5;padding:0}.query::placeholder{color:#96a591}.query:focus-visible{box-shadow:0 1px 0 var(--accent);outline:none}.enter-button{border:1px solid #f0f4df25;border-radius:6px;background:#ecf2dd0c;color:var(--accent);height:26px;width:30px;display:grid;place-items:center;flex-shrink:0;font-size:15px}.enter-button:hover{background:#f6f8e51a}.overlay-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 17px 11px;color:#8e9e8c;font-size:9px}.keyboard-help{display:flex;gap:11px;align-items:center}.overlay kbd{font:inherit;border:1px solid #dce7d029;border-radius:3px;padding:1px 4px;margin-right:3px;color:#b9c7b5}.result-hint{color:#a7bba3}.search-results{display:flex;flex-direction:column;gap:2px;margin:-3px -9px -8px}.search-item{display:flex;width:100%;gap:11px;align-items:center;border:1px solid transparent;background:transparent;color:#e3eade;border-radius:8px;padding:9px 10px;text-align:left}.search-item.active{background:#e7efda0a;border-color:#e2ebd615}.file-icon{height:30px;width:30px;border:1px solid #dbe7cb22;border-radius:7px;background:#dbe7c508;color:var(--accent);display:grid;place-items:center;font-size:13px;flex-shrink:0}.file-main{font-size:12px;font-weight:500;line-height:1.4}.file-meta{font-size:9px;color:#94a68f;margin-top:2px}.file-enter{margin-left:auto;font-size:12px;color:#849b7e}.empty-title{font-size:22px;letter-spacing:-.5px;margin-top:8px;color:#e8eee1}.empty-detail{font-size:11px;color:#9cac96;line-height:1.7;margin-top:8px}.tide .overlay{left:auto;right:3%;bottom:auto;top:15%;width:min(330px,47%);transform:none;background:rgba(21,34,43,var(--glass-opacity));border-color:#d7e9ef35;border-radius:18px;display:flex;flex-direction:column}.tide .overlay[hidden]{display:none}.tide .overlay-top{padding:14px 15px 11px}.tide .composer{order:1;border-top:0;border-bottom:1px solid #d8eaf019;padding:14px 16px;background:#0b1c2828;gap:9px}.tide .query{font-size:13px}.tide .result-zone{order:2;min-height:210px;padding:27px 22px 24px}.tide .overlay-footer{order:3;padding:13px 16px;border-top:1px solid #dae8ef12;flex-wrap:wrap;row-gap:8px}.tide .answer{font-size:39px}.tide .answer.date-answer{font-size:27px}.tide .answer-line{flex-wrap:wrap;gap:6px}.tide .answer-unit{font-size:17px}.tide .answer-detail{max-width:245px;line-height:1.8}.tide .overlay-identity,.tide .result-category{color:#a4bac4}.tide .answer-detail,.tide .file-meta,.tide .empty-detail{color:#9bb4c0}.tide .overlay-footer{color:#91a8b2}.tide .result-hint{color:#9bbac8}.tide .search-item.active{background:#cfebff0c;border-color:#cfeaff19}.tide .result-zone:has(.search-results){padding:17px 17px 20px;min-height:210px}.tide .search-item{padding:10px 9px}.tide .file-meta{font-size:9px}.summon{position:absolute;z-index:2;left:50%;bottom:17%;transform:translateX(-50%);background:#17241be8;border:1px solid #eff7dc44;border-radius:11px;padding:12px 17px;color:#eaf1e3;font-size:12px;box-shadow:0 12px 35px #243a3030;display:flex;gap:13px;align-items:center}.summon[hidden]{display:none}.summon kbd{font-size:10px;color:#b2c6a9;border:1px solid #c6d7b63b;border-radius:4px;padding:3px 5px}.stage-caption{display:none}.preview-footer{display:flex;justify-content:space-between;align-items:center;padding:11px 18px;gap:15px;font-size:10px;color:#758170;border-top:1px solid #d8ded3;background:#f7f8f4}.preview-footer p{margin:0;line-height:1.6}.live-status{color:#3d6551;min-height:16px}
+.below{display:grid;grid-template-columns:1.1fr 1fr;gap:42px;padding-top:25px}.direction-summary h2{font-size:16px;font-weight:590;margin:0 0 8px;letter-spacing:-.3px}.direction-summary p{font-size:12px;line-height:1.8;color:#697665;margin:0;max-width:610px}.decision{border-left:1px solid #cbd4c6;padding-left:28px;display:flex;align-items:center;justify-content:space-between;gap:20px}.decision-copy{font-size:13px;font-weight:550}.decision small{display:block;font-size:11px;color:#72806b;margin-top:6px;line-height:1.6;font-weight:400}.choose-button{border:0;border-radius:8px;color:#f0f5eb;background:#2a4134;padding:11px 16px;font-size:12px;white-space:nowrap}.choose-button:hover{background:#375541}.choose-button[data-selected=true]{background:#dce7d4;color:#314b36}.page-end{margin-top:25px;border-top:1px solid #d2d9ce;padding-top:14px;display:flex;justify-content:space-between;gap:15px;font-size:10px;color:#839079}.compare .stage-grid{grid-template-columns:1fr 1fr;gap:1px;background:#bdc9b6}.compare .stage{min-height:0;aspect-ratio:1.28}.compare .editor{left:5%;top:11%;width:87%;height:76%}.compare .editor-sidebar{display:none}.compare .editor-document{padding:24px 25px}.compare .document-title{font-size:23px}.compare .desktop-menu{gap:10px}.compare .desktop-menu span:nth-last-child(-n+2){display:none}.compare .desktop-right .wifi{display:none}.compare .stage .overlay{width:88%;bottom:13%}.compare .stage.tide .overlay{width:64%;right:4%;top:15%;bottom:auto}.compare .answer{font-size:35px}.compare .answer.date-answer{font-size:25px}.compare .result-zone{min-height:121px;padding:13px 20px 17px}.compare .tide .result-zone{min-height:185px;padding:20px 17px}.compare .tide .answer{font-size:30px}.compare .tide .answer.date-answer{font-size:23px}.compare .tide .composer{padding:12px 13px}.compare .tide .query{font-size:12px}.compare .stage-caption{display:block;position:absolute;left:15px;bottom:14px;font-size:10px;background:#e5ecddc7;color:#384d34;border-radius:4px;padding:4px 7px;z-index:1}.compare .desktop-dock{display:none}.compare .overlay-footer{font-size:8px;gap:6px}.compare .keyboard-help{gap:6px}.compare .overlay-top{padding-top:11px}.compare .query{font-size:13px}.compare .search-item{padding:7px}.compare .file-main{font-size:11px}.compare .file-meta{font-size:9px}.compare .header-note{display:none}
+@media(min-width:1500px){.stage{min-height:580px}.compare .stage{min-height:510px}}
+@media(max-width:1050px){.page{padding:24px}.intro{align-items:start}.intro p{max-width:540px}.mini-diagram{display:none}.direction{padding:15px;gap:12px}.direction-description{font-size:11px}.stage{min-height:500px;aspect-ratio:1.65}.editor{width:82%}.editor-sidebar{width:130px}.editor-document{padding-left:5%;padding-right:5%}.compare .stage-grid{grid-template-columns:1fr}.compare .stage{aspect-ratio:1.7;min-height:440px}.compare .stage .overlay{width:min(520px,79%)}.compare .stage.tide .overlay{width:min(330px,47%)}.compare .editor-sidebar{display:block}.compare .answer{font-size:40px}.compare .tide .answer{font-size:36px}.below{gap:25px}.decision{padding-left:20px}}
+@media(max-width:700px){.page{padding:18px 14px}.page-header{padding-bottom:16px}.header-note{display:none}.intro{padding:24px 0 20px;display:block}h1{font-size:30px;letter-spacing:-1.1px}.intro p{font-size:12px}.compare-button{margin-top:15px}.directions{gap:9px;margin-bottom:14px}.direction{display:block;padding:13px 11px;min-height:117px}.direction .letter{width:25px;height:25px;margin-bottom:10px;font-size:11px}.direction-title{font-size:14px;gap:6px;flex-wrap:wrap}.recommend{font-size:8px;padding:2px 4px}.direction-description{font-size:10px;line-height:1.5}.preview-toolbar{padding:10px;gap:10px}.tasks{gap:1px;flex-wrap:wrap}.task{font-size:11px;padding:7px 8px}.tasks-label{display:none}.settings{width:100%;justify-content:space-between}.stage{aspect-ratio:auto;min-height:480px}.desktop-bar{padding:0 10px;font-size:8px}.desktop-menu{gap:10px}.desktop-menu span:nth-last-child(-n+2){display:none}.desktop-right{gap:6px}.desktop-right .wifi{display:none}.editor{left:5%;top:12%;width:89%;height:75%}.editor-sidebar{display:none}.editor-document{padding:24px 20px}.document-title{font-size:25px}.doc-subtitle{font-size:10px}.doc-line{font-size:10px}.overlay{width:92%;bottom:13%;border-radius:17px}.overlay-top{padding:12px 13px 0}.result-zone{padding:15px 18px 18px;min-height:139px}.answer{font-size:38px}.answer.date-answer{font-size:26px}.composer{padding:13px}.query{font-size:13px}.overlay-footer{padding:9px 13px 11px;font-size:8px}.keyboard-help{gap:7px}.tide .overlay{width:82%;right:5%;top:16%}.tide .result-zone{min-height:218px}.compare .stage{aspect-ratio:auto;min-height:480px}.compare .stage .overlay{width:92%}.compare .stage.tide .overlay{width:82%}.compare .editor-sidebar{display:none}.preview-footer{align-items:start;padding:10px 12px}.preview-footer p{font-size:9px}.preview-footer .live-status{max-width:150px;text-align:right}.below{grid-template-columns:1fr;gap:20px;padding-top:20px}.decision{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.page-end{line-height:1.7}.study-tag{font-size:10px}.wordmark{font-size:14px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+
+<style>
+.idle-states{display:flex;align-items:center;gap:14px;margin-bottom:20px}.state-option{background:transparent;border:1px solid var(--line);border-radius:11px;text-align:left;padding:15px 19px;min-width:260px;color:var(--ink);display:flex;flex-direction:column;gap:6px}.state-option[aria-pressed=true]{background:#f7f8f4;border-color:#718a94;box-shadow:0 0 0 1px #718a94}.state-option .state-number{font-size:10px;color:#647b85}.state-option strong{font-size:14px;font-weight:570}.state-option>span:last-child{font-size:11px;color:var(--muted)}.idle-explanation{font-size:11px;color:var(--muted);line-height:1.8;margin-left:auto}.tide .overlay{border-radius:16px}.tide .overlay-top{display:none}.tide .composer{background:transparent;padding:14px 15px;order:0}.tide .result-zone{min-height:190px}.composer-pin{flex-shrink:0;width:25px;height:25px}.tide .composer-pin{color:#a7b9bf}.tide .composer-pin[aria-pressed=true]{color:var(--tide);background:#c9e5f00d}.tide .overlay.pinned-idle{border-radius:13px;box-shadow:0 8px 28px #10231c28,0 2px 5px #0e221b20}.tide .pinned-idle .result-zone,.tide .pinned-idle .overlay-footer,.tide .pinned-idle .enter-button{display:none}.tide .pinned-idle .composer{border:0;padding:13px 14px;min-height:53px}.tide .pinned-idle .query{font-size:13px}.tide .pinned-idle .composer-pin{background:transparent}.tide .pinned-idle .composer-pin:hover{background:#d4e9f21a}.tide .overlay:not(.pinned-idle) .composer-pin{margin-right:-5px}.direction-summary{min-height:77px}
+@media(max-width:850px){.idle-states{flex-wrap:wrap}.state-option{min-width:0;flex:1}.idle-explanation{margin:0;width:100%}}
+@media(max-width:500px){.state-option{padding:13px;align-self:stretch}.state-option strong{font-size:12px}.state-option>span:last-child{font-size:10px;line-height:1.6}.idle-states{gap:10px}.idle-explanation br{display:none}.tide .composer{gap:6px}.tide .pinned-idle .composer{gap:10px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true"><defs>
+<symbol id="mark" viewBox="0 0 24 24"><path d="M5 19V11a7 7 0 0 1 14 0v8M9 19v-7a3 3 0 0 1 6 0v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M3 19h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+<symbol id="pin" viewBox="0 0 20 20"><path d="m7 3 7 0-1 5 3 3H5l3-3-1-5Zm3 8v6" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+<symbol id="close" viewBox="0 0 20 20"><path d="m6 6 8 8M14 6l-8 8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></symbol>
+<symbol id="prompt" viewBox="0 0 20 20"><path d="m5 5 5 5-5 5m7 0h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+<div class="page">
+<header class="page-header"><div class="wordmark"><svg aria-hidden="true"><use href="#mark"/></svg><span>Athanor</span><span class="study-tag">/ working name</span></div><div class="header-note">Tide · Pinned idle refinement</div></header>
+<main>
+<div class="intro"><div><h1>Only as much as you need.</h1><p>Tide at 65% opacity. A pinned panel becomes just an input when the query is empty.<br>Type to expand it again. Your work stays in view.</p></div><button class="compare-button" id="compare" aria-pressed="true">Try pinned idle</button></div>
+<div class="idle-states" aria-label="Preview states"><button class="state-option" data-preview-state="expanded" aria-pressed="false"><span class="state-number">Full panel</span><strong>Working on a query</strong><span>Input and results, ready to use.</span></button><button class="state-option" data-preview-state="idle" aria-pressed="true"><span class="state-number">Input only</span><strong>Pinned and idle</strong><span>Empty query. No result area or extra chrome.</span></button><p class="idle-explanation">Three seconds after the last input.<br>Typing opens results immediately.</p></div>
+<section class="workbench" aria-label="Interactive desktop mockup">
+<div class="preview-toolbar"><div class="tasks" aria-label="Sample tasks"><span class="tasks-label">Try a task</span><button class="task" data-task="search" aria-pressed="false">Search</button><button class="task" data-task="math" aria-pressed="true">Calculate</button><button class="task" data-task="units" aria-pressed="false">Units</button><button class="task" data-task="dates" aria-pressed="false">Dates</button><button class="task" data-task="currency" aria-pressed="false">Currency</button></div><div class="settings"><label class="opacity-control" for="opacity">Panel opacity <input id="opacity" type="range" min="65" max="98" value="65"><output id="opacity-value" for="opacity">65%</output></label><select id="platform" aria-label="Keyboard convention"><option value="linux">Linux keys</option><option value="windows">Windows keys</option><option value="mac">macOS keys</option></select></div></div>
+<div class="stage-grid" id="stages"></div>
+<div class="preview-footer"><p>Interactive mockup · Example data only · Click the desktop or press Esc to dismiss</p><p class="live-status" id="status" role="status" aria-live="polite"></p></div>
+</section>
+<div class="below"><div class="direction-summary"><h2 id="summary-title">Tide / 65% opacity</h2><p id="summary">The answer sits above your input, like a tiny conversation. A warm focus mark keeps the rest quiet. The panel grows only when results need room and leaves the center of your work visible.</p></div><div class="decision"><div class="decision-copy">Tide is the selected direction.<small>65% opacity · Empty pinned panel collapses to input only.</small></div><button class="choose-button" id="choose" data-selected="false">Choose Ember</button></div></div>
+</main>
+<footer class="page-end"><span>Rust + Rune is the intended app stack. This page explores the interface only.</span><span>No files are read. No apps are launched.</span></footer>
+</div>
+<script>
+'use strict';
+const samples={
+ search:{query:'project',category:'Files & folders'},
+ math:{query:'sqrt(144) + 2^5',category:'Calculator'},
+ units:{query:'12 km in mi',category:'Length'},
+ dates:{query:'2026-11-11 + 45 days',category:'Calendar'},
+ currency:{query:'100 usd to php',category:'Exchange rate'}
+};
+const files=[
+ {name:'Project notes.md',path:'Documents / Studio',kind:'Markdown document',icon:'▤'},
+ {name:'Project brief.pdf',path:'Documents / Studio',kind:'PDF document',icon:'▤'},
+ {name:'Projects',path:'Home',kind:'Folder',icon:'▱'}
+];
+const summaries={
+ ember:{name:'Ember',title:'A / Ember',text:'The answer sits above your input, like a tiny conversation. A warm focus mark keeps the rest quiet. The panel grows only when results need room and leaves the center of your work visible.'},
+ tide:{name:'Tide',title:'Tide / 65% opacity',text:'The input keeps its place at the right edge. When pinned, an empty query collapses the panel after three quiet seconds. Typing brings results back immediately. A small pin button remains available, so you can always unpin it.'}
+};
+let direction='tide',task='math',comparing=false,selection='tide',platform='linux';
+const states={ember:{query:samples.math.query,pinned:false,visible:true,index:0},tide:{query:'',pinned:true,visible:true,index:0,idle:true}};
+const stages=document.getElementById('stages');
+const status=document.getElementById('status');
+const IDLE_DELAY_MS=3000;
+const idleTimers=new Map();
+function idleEligible(state){return state.visible&&state.pinned&&state.query.trim()===''}
+function cancelIdle(kind){
+ const timer=idleTimers.get(kind);
+ if(timer!==undefined){clearTimeout(timer);idleTimers.delete(kind)}
+}
+function scheduleIdle(stage){
+ const kind=stage.dataset.stage,state=states[kind];
+ cancelIdle(kind);
+ if(!idleEligible(state)||state.idle)return;
+ idleTimers.set(kind,setTimeout(()=>{
+  idleTimers.delete(kind);
+  if(stage.isConnected&&idleEligible(state)){
+   state.idle=true;paintResult(stage);
+   status.textContent='Pinned and idle. Only the input stays visible.';
+  }
+ },IDLE_DELAY_MS));
+}
+function showPreviewState(idle){
+ stages.querySelectorAll('.stage').forEach(stage=>{
+  const state=states[stage.dataset.stage];
+  cancelIdle(stage.dataset.stage);
+  state.query=idle?'':samples.math.query;state.pinned=true;state.visible=true;state.index=0;state.idle=false;
+  stage.querySelector('.query').value=state.query;
+  paintResult(stage);scheduleIdle(stage);
+ });
+ status.textContent=idle?'Empty and pinned. Collapsing after 3 seconds…':'Typing keeps the full panel open.';
+}
+const escapeText=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const icon=id=>'<svg aria-hidden="true"><use href="#'+id+'"/></svg>';
+function desktopMarkup(kind){
+ return '<section class="stage '+kind+'" data-stage="'+kind+'" aria-label="'+summaries[kind].name+' desktop preview">'+
+ '<div class="wallpaper" aria-hidden="true"></div><div class="desktop-bar" aria-hidden="true"><div class="desktop-menu"><span class="system-dot"></span><strong>Workspace</strong><span>File</span><span>Edit</span><span>View</span></div><div class="desktop-right"><span class="wifi"></span><span>▰</span><span class="desktop-time">Wed 11 Nov &nbsp; 10:42</span></div></div>'+
+ '<div class="editor" aria-hidden="true"><div class="window-bar"><span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span><span class="window-title">Project notes — Workspace</span></div><div class="editor-body"><div class="editor-sidebar"><div class="sidebar-title">Studio</div><div class="file-link selected">Project notes</div><div class="file-link">Launch checklist</div><div class="file-link">Research</div><div class="file-link">References</div></div><div class="editor-document"><div class="breadcrumb">Studio &nbsp; / &nbsp; Project notes</div><div class="document-title">A little more focus.</div><p class="doc-subtitle">Wednesday, 11 November 2026<br>Notes for the next iteration.</p><div class="document-rule"></div><div class="doc-section">What matters this week</div><p class="doc-line">Make the everyday things feel effortless.</p><p class="doc-line">Leave enough room to think about everything else.</p><div class="doc-section">Before the next review</div><div class="doc-check"><span class="checkbox checked"></span>Collect the first round of feedback</div><div class="doc-check"><span class="checkbox"></span>Refine the small interactions</div><div class="doc-check"><span class="checkbox"></span>Check the details on every platform</div><div class="doc-footer"><span>Edited just now</span><span>All changes saved</span></div></div></div></div>'+
+ '<div class="desktop-label" aria-hidden="true">Your active workspace</div><div class="desktop-dock" aria-hidden="true"><span class="dock-icon">▱</span><span class="dock-icon">◈</span><span class="dock-icon">▤</span><span class="dock-icon">⌘</span></div>'+
+ '<div class="overlay" role="region" aria-label="'+summaries[kind].name+' command panel"><div class="overlay-top"><div class="overlay-identity">'+icon('mark')+'<span class="panel-label">Quick answer</span></div><div class="overlay-buttons"><button class="icon-button pin" title="Keep panel open" aria-label="Keep panel open" aria-pressed="false">'+icon('pin')+'</button><button class="icon-button close" title="Dismiss panel" aria-label="Dismiss panel">'+icon('close')+'</button></div></div><div class="result-zone"></div><form class="composer">'+icon('prompt').replace('<svg ','<svg class="composer-icon" ')+'<input class="query" type="text" spellcheck="false" autocomplete="off" aria-label="'+summaries[kind].name+' query" placeholder="Search, calculate, convert…"><button class="icon-button composer-pin" type="button" aria-label="Unpin panel" title="Unpin panel" aria-pressed="true">'+icon('pin')+'</button><button class="enter-button" type="submit" title="Copy result" aria-label="Copy result">↵</button></form><div class="overlay-footer"><span class="keyboard-help"><span><kbd>↵</kbd><span class="enter-hint">copy</span></span><span><kbd>esc</kbd>close</span></span><span class="result-hint">On your device</span></div></div>'+
+ '<button class="summon" hidden>Open preview <kbd class="hotkey">Alt Space</kbd></button><span class="stage-caption">'+summaries[kind].title+'</span></section>';
+}
+function parseDate(query){
+ const q=query.toLowerCase().trim();
+ let m=q.match(/^(\d{4}-\d{2}-\d{2})\s*([+-])\s*(\d{1,5})\s*days?$/);
+ if(!m)return null;
+ const d=new Date(m[1]+'T12:00:00Z');
+ if(!Number.isFinite(d.getTime())||d.toISOString().slice(0,10)!==m[1])return null;
+ const count=Number(m[3])*(m[2]==='-'?-1:1);
+ d.setUTCDate(d.getUTCDate()+count);
+ return {value:new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}).format(d),detail:new Intl.DateTimeFormat('en-US',{weekday:'long',timeZone:'UTC'}).format(d)+' · '+Math.abs(count)+' calendar days '+(count>=0?'after':'before')+' '+m[1],copy:d.toISOString().slice(0,10)};
+}
+// A small mockup-only expression parser; never executes input as JavaScript.
+function arithmetic(input){
+ const compact=input.toLowerCase().replace(/×/g,'*').replace(/÷/g,'/').replace(/\s/g,'');
+ const tokens=compact.match(/(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?|sqrt|sin|cos|tan|log|ln|pi|e|[()+*/^%-]/g);
+ if(!tokens||tokens.join('')!==compact||!/[+\-*/^%()]|sqrt|sin|cos|tan|log|ln/.test(compact))return null;
+ if(tokens.length>160)return null;
+ let i=0;
+ function expression(){let a=product();while(tokens[i]==='+'||tokens[i]==='-'){const op=tokens[i++],b=product();a=op==='+'?a+b:a-b}return a}
+ function product(){let a=unary();while(['*','/','%'].includes(tokens[i])){const op=tokens[i++],b=unary();a=op==='*'?a*b:op==='/'?a/b:a%b}return a}
+ function unary(){if(tokens[i]==='+'){i++;return unary()}if(tokens[i]==='-'){i++;return -unary()}return power()}
+ function power(){let a=atom();if(tokens[i]==='^'){i++;a=Math.pow(a,unary())}return a}
+ function atom(){const t=tokens[i++];if(t==='('){const a=expression();if(tokens[i++]!==')')throw Error('parenthesis');return a}if(t==='pi')return Math.PI;if(t==='e')return Math.E;if(['sqrt','sin','cos','tan','log','ln'].includes(t)){if(tokens[i++]!=='(')throw Error('function');const a=expression();if(tokens[i++]!==')')throw Error('parenthesis');return ({sqrt:Math.sqrt,sin:Math.sin,cos:Math.cos,tan:Math.tan,log:Math.log10,ln:Math.log})[t](a)}if(t===undefined||!/^(\d|\.)/.test(t))throw Error('number');return Number(t)}
+ try{const value=expression();if(i!==tokens.length||!Number.isFinite(value))return null;return value}catch{return null}
+}
+function interpret(query){
+ const q=query.trim(),lower=q.toLowerCase(),date=parseDate(q);
+ if(!q)return {type:'empty',category:'Ready when you are',value:'A little help, right here.',detail:'Find a file, work out a number, or convert a measurement.'};
+ if(date)return {type:'answer',category:'Calendar',value:date.value,detail:date.detail,copy:date.copy,date:true};
+ let m=lower.match(/^(-?\d+(?:\.\d+)?)\s*km\s+(?:in|to)\s+(?:mi|miles?)$/);
+ if(m){const v=Number(m[1])/1.609344;return {type:'answer',category:'Length',value:new Intl.NumberFormat('en-US',{maximumFractionDigits:5}).format(v),unit:'mi',detail:m[1]+' kilometers · international mile',copy:v.toFixed(5)+' mi'}}
+ m=lower.match(/^(\d+(?:\.\d+)?)\s*usd\s+(?:in|to)\s+php$/);
+ if(m){const v=Number(m[1])*58.5;return {type:'answer',category:'Exchange rate · example',value:new Intl.NumberFormat('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).format(v),unit:'PHP',detail:'Illustrative rate: 1 USD = 58.50 PHP. Demo data; not a live quote.',copy:v.toFixed(2)+' PHP',fixture:true}}
+ const value=arithmetic(q);
+ if(value!==null)return {type:'answer',category:'Calculator',value:new Intl.NumberFormat('en-US',{maximumFractionDigits:10}).format(Object.is(value,-0)?0:value),detail:/(?:sin|cos|tan)\(/i.test(q)?'Trigonometric functions use radians in this preview.':'Calculated on your device',copy:String(value)};
+ if(/project|notes|brief/i.test(q))return {type:'search',category:'Files & folders',items:files};
+ if(/firefox/i.test(q))return {type:'search',category:'Applications',items:[{name:'Firefox',path:'Applications',kind:'Web browser',icon:'◉'}]};
+ return {type:'empty',category:'Preview examples',value:'Try a sample above.',detail:'This mockup supports project, Firefox, arithmetic, km to mi, ISO date ± days, and USD to PHP. The production feature set is broader.'};
+}
+function paintResult(stage){
+ const kind=stage.dataset.stage,s=states[kind],answer=interpret(s.query);
+ const result=stage.querySelector('.result-zone');
+ let html='<div class="result-category"><span class="category-dot"></span>'+escapeText(answer.category)+'</div>';
+ if(answer.type==='search'){
+  s.index=Math.min(s.index,answer.items.length-1);
+  html+='<div class="search-results">'+answer.items.map((f,i)=>'<button type="button" class="search-item '+(i===s.index?'active':'')+'" data-result="'+i+'"><span class="file-icon" aria-hidden="true">'+f.icon+'</span><span><span class="file-main">'+escapeText(f.name)+'</span><span class="file-meta" style="display:block">'+escapeText(f.path)+'</span></span><span class="file-enter" aria-hidden="true">'+(i===s.index?'↵':'')+'</span></button>').join('')+'</div>';
+ }else if(answer.type==='empty'){
+  html+='<div class="empty-title">'+escapeText(answer.value)+'</div><div class="empty-detail">'+escapeText(answer.detail)+'</div>';
+ }else{
+  html+='<div class="answer-line"><span class="answer '+(answer.date?'date-answer':'')+'">'+escapeText(answer.value)+'</span>'+(answer.unit?'<span class="answer-unit">'+escapeText(answer.unit)+'</span>':'')+'</div><div class="answer-detail'+(answer.fixture?' fixture':'')+'">'+escapeText(answer.detail)+'</div>';
+ }
+ result.innerHTML=html;
+ stage.querySelector('.enter-hint').textContent=answer.type==='search'?'open':'copy';
+ stage.querySelector('.enter-button').setAttribute('aria-label',answer.type==='search'?'Preview opening selected result':'Copy result');
+ stage.querySelector('.enter-button').title=answer.type==='search'?'Preview opening selected result':'Copy result';
+ stage.querySelector('.enter-button').disabled=answer.type==='empty';
+ stage.querySelector('.panel-label').textContent=answer.type==='search'?'Find something':'Quick answer';
+ stage.querySelector('.result-hint').textContent=s.pinned?'Pinned':answer.fixture?'Example rate':'On your device';
+ stage.querySelector('.pin').setAttribute('aria-pressed',String(s.pinned));
+ stage.querySelector('.pin').setAttribute('aria-label',s.pinned?'Unpin panel':'Keep panel open');
+ stage.querySelector('.composer-pin').setAttribute('aria-pressed',String(s.pinned));
+ stage.querySelector('.composer-pin').setAttribute('aria-label',s.pinned?'Unpin panel':'Keep panel open');
+ stage.querySelector('.composer-pin').title=s.pinned?'Unpin panel':'Keep panel open';
+ const collapsed=Boolean(s.idle&&idleEligible(s));
+ stage.querySelector('.overlay').classList.toggle('pinned-idle',collapsed);
+ stage.querySelector('.overlay').setAttribute('aria-label',collapsed?'Pinned Tide input':'Tide command panel');
+ stage.querySelector('.query').setAttribute('aria-expanded',String(!collapsed));
+ stage.querySelector('.query').setAttribute('aria-controls','results-'+kind);
+ stage.querySelector('.result-zone').id='results-'+kind;
+ document.querySelectorAll('[data-preview-state]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.previewState===(collapsed?'idle':'expanded'))));
+ stage.querySelector('.overlay').hidden=!s.visible;
+ stage.querySelector('.summon').hidden=s.visible;
+ stage.querySelector('.hotkey').textContent=platform==='mac'?'⌥ Space':'Alt Space';
+}
+function buildStages(){
+ for(const kind of idleTimers.keys())cancelIdle(kind);
+ stages.innerHTML=(comparing?['ember','tide']:[direction]).map(desktopMarkup).join('');
+ stages.querySelectorAll('.stage').forEach(stage=>{
+  const kind=stage.dataset.stage,s=states[kind],input=stage.querySelector('.query');
+  input.value=s.query;paintResult(stage);
+  input.addEventListener('input',()=>{
+   s.query=input.value;s.index=0;s.idle=false;paintResult(stage);scheduleIdle(stage);status.textContent=s.pinned&&!s.query.trim()?'Empty and pinned. Collapsing after 3 seconds…':'';
+  });
+  input.addEventListener('keydown',ev=>{
+   scheduleIdle(stage);
+   const result=interpret(s.query);
+   if((ev.key==='ArrowDown'||ev.key==='ArrowUp')&&result.type==='search'){
+    ev.preventDefault();s.index=(s.index+(ev.key==='ArrowDown'?1:-1)+result.items.length)%result.items.length;paintResult(stage);
+   }
+  });
+  stage.querySelector('.composer').addEventListener('submit',ev=>{ev.preventDefault();act(stage)});
+  stage.querySelector('.result-zone').addEventListener('click',ev=>{
+   const row=ev.target.closest('[data-result]');
+   if(row){s.index=Number(row.dataset.result);paintResult(stage);act(stage)}
+  });
+  const togglePin=()=>{
+   s.pinned=!s.pinned;s.idle=false;paintResult(stage);scheduleIdle(stage);
+   status.textContent=s.pinned?(s.query.trim()?'Pinned. Results stay open while a query is present.':'Pinned and empty. Collapsing after 3 seconds…'):'Unpinned. The panel now dismisses when you click outside.';
+  };
+  stage.querySelector('.pin').addEventListener('click',togglePin);
+  stage.querySelector('.composer-pin').addEventListener('click',togglePin);
+  stage.querySelector('.overlay').addEventListener('pointerdown',()=>scheduleIdle(stage));
+  stage.querySelector('.close').addEventListener('click',()=>dismiss(stage));
+  stage.querySelector('.summon').addEventListener('click',()=>{s.visible=true;s.idle=false;paintResult(stage);scheduleIdle(stage);input.focus()});
+  stage.addEventListener('click',ev=>{
+   if(!ev.target.closest('.overlay,.summon')&&!s.pinned)dismiss(stage);
+  });
+  scheduleIdle(stage);
+ });
+}
+function dismiss(stage){
+ const s=states[stage.dataset.stage];cancelIdle(stage.dataset.stage);s.visible=false;s.idle=false;paintResult(stage);status.textContent='Panel hidden. Your work stays in view.';stage.querySelector('.summon').focus();
+}
+async function act(stage){
+ const kind=stage.dataset.stage,s=states[kind],result=interpret(s.query);
+ if(result.type==='search'){
+  const f=result.items[s.index];status.textContent='Preview: would open '+f.name+'.';return;
+ }
+ if(result.type==='answer'){
+  try{await navigator.clipboard.writeText(result.copy);status.textContent='Copied '+result.copy+'.'}catch{status.textContent='Result: '+result.copy+' (clipboard unavailable).'}
+ }
+}
+function refreshDirection(){
+ document.querySelectorAll('[data-direction]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.direction===direction)));
+ document.getElementById('summary-title').textContent=summaries[direction].title;
+ document.getElementById('summary').textContent=summaries[direction].text;
+ const chosen=selection===direction;
+ document.getElementById('choose').textContent=chosen?summaries[direction].name+' selected':'Choose '+summaries[direction].name;
+ document.getElementById('choose').dataset.selected=String(chosen);
+}
+document.querySelectorAll('[data-direction]').forEach(button=>button.addEventListener('click',()=>{
+ direction=button.dataset.direction;refreshDirection();if(!comparing)buildStages();status.textContent='';
+}));
+document.getElementById('compare').addEventListener('click',()=>showPreviewState(true));
+document.querySelectorAll('[data-preview-state]').forEach(button=>button.addEventListener('click',()=>showPreviewState(button.dataset.previewState==='idle')));
+document.querySelectorAll('[data-task]').forEach(button=>button.addEventListener('click',()=>{
+ task=button.dataset.task;document.querySelectorAll('[data-task]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+ Object.values(states).forEach(s=>{s.query=samples[task].query;s.visible=true;s.index=0;s.idle=false});
+ stages.querySelectorAll('.stage').forEach(stage=>{stage.querySelector('.query').value=states[stage.dataset.stage].query;paintResult(stage);scheduleIdle(stage)});
+ status.textContent=task==='currency'?'Currency rates are illustrative example data.':'';
+}));
+document.getElementById('opacity').addEventListener('input',ev=>{
+ document.documentElement.style.setProperty('--glass-opacity',String(Number(ev.target.value)/100));
+ document.getElementById('opacity-value').value=ev.target.value+'%';
+});
+document.getElementById('platform').addEventListener('change',ev=>{
+ platform=ev.target.value;stages.querySelectorAll('.stage').forEach(paintResult);
+ status.textContent='Keyboard convention updated. This is a shared desktop concept.';
+});
+document.getElementById('choose').addEventListener('click',()=>{
+ selection=direction;refreshDirection();status.textContent=summaries[direction].name+' selected. Tell me what you would change in the chat.';
+ // The visual companion helper records the choice for the design interview.
+ if(window.brainstorm&&typeof window.brainstorm.send==='function'){
+  window.brainstorm.send({type:'click',choice:direction,text:summaries[direction].title});
+ }
+});
+document.addEventListener('keydown',ev=>{
+ if(ev.key==='Escape'){
+  const focused=document.activeElement.closest&&document.activeElement.closest('.stage');
+  const stage=focused||stages.querySelector('[data-stage="'+direction+'"]')||stages.firstElementChild;
+  if(stage&&states[stage.dataset.stage].visible){ev.preventDefault();dismiss(stage)}
+ }
+ if(ev.code==='Space'&&ev.altKey){
+  ev.preventDefault();const stage=stages.querySelector('[data-stage="'+direction+'"]')||stages.firstElementChild;
+  const s=states[stage.dataset.stage];s.visible=!s.visible;s.idle=false;paintResult(stage);scheduleIdle(stage);if(s.visible)stage.querySelector('.query').focus();
+ }
+});
+buildStages();refreshDirection();
+const previewOptions=new URLSearchParams(window.location.search);
+if(previewOptions.get('state')==='expanded')showPreviewState(false);
+</script>
+</body>
+</html>
