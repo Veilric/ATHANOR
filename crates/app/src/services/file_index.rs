@@ -54,7 +54,22 @@ impl FileIndexService {
                 let change=match event {
                     Ok(event)=>{
                         if matches!(event.kind,notify::EventKind::Access(_)){return}
-                        let paths:Vec<_>=event.paths.into_iter().filter(|p|p!=&cache_event && p.file_name().is_none_or(|n|!n.to_string_lossy().starts_with('.'))).collect();
+                        // Windows reports parent-directory writes when the cache is replaced.
+                        // The name index needs directory create/remove/rename events, while
+                        // modifications to directory metadata do not change indexed names.
+                        let directory_metadata = matches!(
+                            event.kind,
+                            notify::EventKind::Modify(
+                                notify::event::ModifyKind::Any
+                                    | notify::event::ModifyKind::Data(_)
+                                    | notify::event::ModifyKind::Metadata(_)
+                            )
+                        );
+                        let paths: Vec<_> = event.paths.into_iter().filter(|path| {
+                            path != &cache_event
+                                && path.file_name().is_none_or(|name| !name.to_string_lossy().starts_with('.'))
+                                && !(directory_metadata && path.is_dir())
+                        }).collect();
                         if paths.is_empty(){return} Change::Paths(paths)
                     }
                     Err(_)=>Change::Rescan,

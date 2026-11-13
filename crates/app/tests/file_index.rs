@@ -93,7 +93,7 @@ fn relative_cache_inside_an_indexed_root_does_not_rescan_itself() {
     let service = FileIndexService::start(
         vec![dir.path().to_owned()],
         cache,
-        snapshot,
+        snapshot.clone(),
         Arc::new(move || {
             count.fetch_add(1, Ordering::Relaxed);
         }),
@@ -107,5 +107,30 @@ fn relative_cache_inside_an_indexed_root_does_not_rescan_itself() {
         before,
         "cache writes must not cause new scans"
     );
+    std::fs::write(dir.path().join("data/added.txt"), "").unwrap();
+    wait(|| {
+        snapshot
+            .read()
+            .unwrap()
+            .entries
+            .iter()
+            .any(|entry| entry.title == "added.txt")
+    });
+    std::fs::rename(
+        dir.path().join("data/added.txt"),
+        dir.path().join("data/renamed.txt"),
+    )
+    .unwrap();
+    wait(|| {
+        let snapshot = snapshot.read().unwrap();
+        snapshot
+            .entries
+            .iter()
+            .any(|entry| entry.title == "renamed.txt")
+            && !snapshot
+                .entries
+                .iter()
+                .any(|entry| entry.title == "added.txt")
+    });
     drop(service);
 }

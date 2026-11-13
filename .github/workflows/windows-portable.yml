@@ -20,16 +20,6 @@ jobs:
           targets: x86_64-pc-windows-msvc
       - name: Format
         run: cargo fmt --all --check
-      - name: Diagnose native index notifications
-        shell: pwsh
-        run: |
-          $path = 'crates/app/src/services/file_index.rs'
-          $source = Get-Content -Raw $path
-          $source.Replace('Ok(event)=>{', 'Ok(event)=>{eprintln!("INDEX_EVENT {event:?} CACHE {cache_event:?}");') | Set-Content -NoNewline -Encoding utf8 $path
-          cargo test -p athanor --no-default-features --test file_index --locked --jobs 2 --target x86_64-pc-windows-msvc -- --nocapture
-          $result = $LASTEXITCODE
-          git restore $path
-          exit $result
       - name: Lint
         run: cargo clippy --workspace --all-targets --locked --jobs 2 --target x86_64-pc-windows-msvc -- -D warnings
       - name: Test
