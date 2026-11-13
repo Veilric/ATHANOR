@@ -1,15 +1,15 @@
-# Athanor
+# ATHANOR — by Veilric
 
 A small native launcher built with Rust and [Anomaly Rune](https://github.com/anomalyco/rune). Tide is its narrow, translucent interface: 65% opacity, an anchored input, and just the result you need. Inspired by Raycast and [dinogomez/Runecast](https://github.com/dinogomez/runecast), with an independent design and implementation.
 
-**Local preview, version 0.1.0.** Linux X11 desktop checks have passed on the development machine. The memory budget is still unmet; [review notes](docs/verification/review.md) list remaining issues. Windows and macOS adapters are implemented but need native builds and acceptance checks. Native Wayland is currently refused rather than presenting a launcher that cannot receive input. See [platform support](docs/platform-support.md) and [remaining release gates](docs/verification/native-checklist.md).
+**Private preview, version 0.1.0.** Linux X11 desktop checks have passed on the development machine. The memory budget is still unmet; [review notes](docs/verification/review.md) list remaining issues. Native Windows CI builds and packages the unsigned x64 preview. Windows GUI acceptance and macOS native acceptance remain pending. See the [Windows portable guide](docs/windows-portable.md). Native Wayland is currently refused rather than presenting a launcher that cannot receive input. See [platform support](docs/platform-support.md) and [remaining release gates](docs/verification/native-checklist.md).
 
 ## Run
 
 Build with Rust **1.99.1**, then launch:
 
 ```sh
-cargo build --locked --release -p athanor --bin athanor
+cargo build --locked --release --jobs 2 -p athanor --bin athanor
 ./target/release/athanor
 ```
 
@@ -62,6 +62,6 @@ sh scripts/package.sh
 
 Native UI tests use Rune's actual interaction runtime. `scripts/check-native-x11.py` adds controlled X11/XTest checks; it creates its own typing sentinel and sends text only to Athanor or that sentinel. It records failures rather than declaring unobserved behavior passed. For Windows/macOS, use the [native checklist](docs/verification/native-checklist.md). Resource measurements and their limits are in [resources.md](docs/verification/resources.md).
 
-Build on each target OS. On macOS, `CARGO_BUILD_TARGET=aarch64-apple-darwin sh scripts/package.sh` or `x86_64-apple-darwin` produces an unsigned `.app` archive. On Windows, `powershell -File scripts/package.ps1` produces an unsigned x86_64 ZIP. Linux packaging produces an x86_64 tarball on the available host. Install target toolchains before cross-architecture macOS builds. Signing, notarization, remote CI execution and publishing have not been performed.
+Build on each target OS. On macOS, `CARGO_BUILD_TARGET=aarch64-apple-darwin sh scripts/package.sh` or `x86_64-apple-darwin` produces an unsigned `.app` archive. On Windows, `powershell -File scripts/package.ps1` produces an unsigned x86_64 ZIP. Linux packaging produces an x86_64 tarball on the available host. Install target toolchains before cross-architecture macOS builds. The Windows workflow checks formatting, linting, and tests, then compiles with a static C runtime, packages `ATHANOR.exe`, validates the AMD64 PE and distribution files, runs isolated non-GUI queries, and publishes a checksummed workflow artifact. Native CI also checks Linux and both macOS architectures. Signing, notarization, and Windows GUI acceptance remain pending.
 
-Rune is pinned to `bb310fc9e2c4a1a1937814c71efc08924a5c2885`; `Cargo.lock` is preserved. See [dependency notes](docs/dependencies.md). Local packages include dependency license texts and metadata. This source has not been assigned a distribution license or published.
+Rune is pinned to `bb310fc9e2c4a1a1937814c71efc08924a5c2885`; `Cargo.lock` is preserved. See [dependency notes](docs/dependencies.md). Local packages include dependency license texts and metadata. The official repository is private at [Veilric/ATHANOR](https://github.com/Veilric/ATHANOR). This source has not been assigned a public distribution license.

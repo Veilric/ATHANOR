@@ -1,15 +1,23 @@
 #!/usr/bin/env python3
 """Copy exact dependency metadata/licenses into a local package from cargo metadata."""
 import json
+import argparse
 from pathlib import Path
 import shutil
 import subprocess
 import sys
 root = Path(__file__).resolve().parent.parent
-destination = Path(sys.argv[1])
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('destination', type=Path)
+parser.add_argument('--metadata', type=Path, help='Previously resolved cargo metadata JSON')
+args = parser.parse_args()
+destination = args.destination
 destination.mkdir(parents=True, exist_ok=True)
-metadata = json.loads(subprocess.check_output([sys.executable, str(root / 'scripts/cargo-local.py'),
-                                             'metadata', '--locked', '--offline', '--format-version', '1'], cwd=root))
+if args.metadata:
+    metadata = json.loads(args.metadata.read_text(encoding='utf-8-sig'))
+else:
+    metadata = json.loads(subprocess.check_output([sys.executable, str(root / 'scripts/cargo-local.py'),
+                                                 'metadata', '--locked', '--offline', '--format-version', '1'], cwd=root))
 workspace = set(metadata['workspace_members'])
 rows = ['# Third-party dependencies', '', 'Generated from the locked source metadata. Optional/other-platform dependencies are included.', '']
 for package in sorted(metadata['packages'], key=lambda p: (p['name'], p['version'])):
@@ -28,9 +36,15 @@ for package in sorted(metadata['packages'], key=lambda p: (p['name'], p['version
             if candidates:
                 files.update(candidates)
                 break
+    # Rune embeds font binaries whose redistribution notices live with the assets.
+    if package['name'] == 'rune':
+        font_notices = list((source / 'assets').glob('*LICENSE*'))
+        if not any(path.name == 'Inter-LICENSE.txt' for path in font_notices):
+            raise RuntimeError('Rune embedded Inter font notice is missing')
+        files.update(font_notices)
     target = destination / label
     for path in sorted(files):
         if path.is_file():
             target.mkdir(exist_ok=True)
             shutil.copyfile(path, target / path.name)
-(destination / 'DEPENDENCIES.md').write_text('\n'.join(rows) + '\n')
+(destination / 'DEPENDENCIES.md').write_text('\n'.join(rows) + '\n', encoding='utf-8')

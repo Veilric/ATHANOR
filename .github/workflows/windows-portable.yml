@@ -1,0 +1,38 @@
+name: Windows portable preview
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+env:
+  CARGO_BUILD_JOBS: '2'
+  CARGO_TARGET_X86_64_PC_WINDOWS_MSVC_RUSTFLAGS: '-C target-feature=+crt-static'
+jobs:
+  windows:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.99.1
+          components: rustfmt, clippy
+          targets: x86_64-pc-windows-msvc
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Lint
+        run: cargo clippy --workspace --all-targets --locked --jobs 2 --target x86_64-pc-windows-msvc -- -D warnings
+      - name: Test
+        run: cargo test --workspace --locked --jobs 2 --target x86_64-pc-windows-msvc
+      - name: Release build
+        run: cargo build --release --locked --jobs 2 --target x86_64-pc-windows-msvc -p athanor --bin athanor
+      - name: Package, validate PE, smoke test, and checksum
+        shell: pwsh
+        run: ./scripts/package.ps1 -SkipBuild
+      - name: Upload verified portable package
+        uses: actions/upload-artifact@v7
+        with:
+          name: ATHANOR-windows-x64-portable
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            artifacts/ATHANOR-windows-x64-portable.zip
+            artifacts/ATHANOR-windows-x64-portable.zip.sha256
+            artifacts/windows-verification.json
