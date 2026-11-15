@@ -129,21 +129,56 @@ fn cancelled_or_missing_roots_do_not_crash() {
 fn non_utf8_paths_survive_cache_roundtrip_and_unicode_names_are_searchable() {
     use std::os::unix::ffi::OsStringExt;
     let dir = tempfile::tempdir().unwrap();
-    fs::write(
-        dir.path()
-            .join(std::ffi::OsString::from_vec(b"report-\xff.md".to_vec())),
-        "",
-    )
-    .unwrap();
+    let report = dir
+        .path()
+        .join(std::ffi::OsString::from_vec(b"report-\xff.md".to_vec()));
     fs::write(dir.path().join("雪の計画.md"), "").unwrap();
-    let snapshot = build_file_snapshot(&[dir.path().to_owned()], &Cancellation::default()).unwrap();
+    let mut entries = build_file_snapshot(&[dir.path().to_owned()], &Cancellation::default())
+        .unwrap()
+        .entries;
+    // APFS rejects invalid UTF-8 filenames. Cache encoding still accepts native Unix paths.
+    entries.push(Arc::new(SearchEntry {
+        id: "non-utf8-report".into(),
+        title: report.file_name().unwrap().to_string_lossy().into_owned(),
+        location: report.clone(),
+        target: OpenTarget::Path(report.clone()),
+        is_folder: false,
+    }));
+    let snapshot = SearchSnapshot::from_shared(entries);
     let cache = dir.path().join("cache.jsonl");
     write_cache(&cache, &snapshot).unwrap();
     let restored = read_cache(&cache).unwrap();
     assert_eq!(restored.entries.len(), 2);
+    let entry = restored
+        .entries
+        .iter()
+        .find(|entry| entry.id == "non-utf8-report")
+        .unwrap();
+    assert_eq!(entry.location, report);
+    assert!(matches!(&entry.target, OpenTarget::Path(path) if path == &report));
     let feature = SearchFeature::new(Arc::new(RwLock::new(Arc::new(restored))));
     assert_eq!(query(&feature, "report").len(), 1);
     assert_eq!(query(&feature, "計画").len(), 1);
+}
+#[cfg(target_os = "linux")]
+#[test]
+fn indexing_preserves_non_utf8_filenames() {
+    use std::os::unix::ffi::OsStringExt;
+    let dir = tempfile::tempdir().unwrap();
+    let report = dir
+        .path()
+        .join(std::ffi::OsString::from_vec(b"report-\xff.md".to_vec()));
+    fs::write(&report, "").unwrap();
+    let report = report.canonicalize().unwrap();
+    let snapshot = build_file_snapshot(&[dir.path().to_owned()], &Cancellation::default()).unwrap();
+    let cache = dir.path().join("cache.jsonl");
+    write_cache(&cache, &snapshot).unwrap();
+    let restored = read_cache(&cache).unwrap();
+    assert_eq!(restored.entries.len(), 1);
+    assert_eq!(restored.entries[0].location, report);
+    assert!(matches!(&restored.entries[0].target, OpenTarget::Path(path) if path == &report));
+    let feature = SearchFeature::new(Arc::new(RwLock::new(Arc::new(restored))));
+    assert_eq!(query(&feature, "report").len(), 1);
 }
 #[test]
 fn query_of_one_hundred_thousand_entries_is_bounded() {
