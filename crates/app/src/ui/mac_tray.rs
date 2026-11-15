@@ -24,8 +24,7 @@ pub fn create(state: &mut AppState) {
         let icon = Icon::from_rgba(native::tray_pixels(), 32, 32).map_err(|e| e.to_string())?;
         TrayIconBuilder::new()
             .with_tooltip("Athanor")
-            .with_icon(icon)
-            .with_icon_as_template(true)
+            .with_icon_templated(icon)
             .with_menu(Box::new(menu))
             .build()
             .map_err(|e| e.to_string())
