@@ -60,8 +60,13 @@ fn another_action_cannot_replace_an_unconsumed_completion() {
 #[cfg(unix)]
 #[test]
 fn a_started_helper_that_exits_unsuccessfully_is_not_a_successful_open() {
-    let mut helper = std::process::Command::new("/bin/false");
-    assert!(athanor::platform::launch_helper(&mut helper, Duration::from_secs(1)).is_err());
-    let mut helper = std::process::Command::new("/bin/true");
+    // Linux and macOS both provide /bin/sh, with a deterministic exit builtin.
+    let mut helper = std::process::Command::new("/bin/sh");
+    helper.args(["-c", "exit 1"]);
+    let error = athanor::platform::launch_helper(&mut helper, Duration::from_secs(1)).unwrap_err();
+    assert_eq!(error.kind(), std::io::ErrorKind::Other);
+    assert!(error.to_string().contains("rejected the target"));
+    let mut helper = std::process::Command::new("/bin/sh");
+    helper.args(["-c", "exit 0"]);
     assert!(athanor::platform::launch_helper(&mut helper, Duration::from_secs(1)).is_ok());
 }
